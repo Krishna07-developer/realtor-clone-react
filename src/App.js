@@ -5,8 +5,11 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import Profile from './pages/Profile';
+import Header from "./components/Header";
 function App() {
   return (
+    <>
+    <Header/>
     <Routes>
       <Route path="/" element={<Home/>}/>
       <Route path="/profile" element={<Profile/>}/>
@@ -15,6 +18,7 @@ function App() {
       <Route path="/sign-up" element={<SignUp/>}/>
       <Route path="/forgot-password" element={<ForgotPassword/>}/>
     </Routes>
+    </>
   );
 }
 
