@@ -77,12 +77,12 @@ const SignUp = () => {
             <button className='w-full bg-blue-600 p-2 my-2 rounded-lg text-white text-sm 
             font-medium uppercase shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-150 ease-in-out active:bg-blue-800'>
             Sign Up</button>
+            <div className='my-4 before:border-t flex before:flex-1 items-center before:border-gray-300
+            after:border-t  after:flex-1  after:border-gray-300'>
+              <p className='text-center font-semibold mx-4'>OR</p>
+            </div>
+            <OAuth/>
           </form>
-          <div className='my-4 before:border-t flex before:flex-1 items-center before:border-gray-300
-          after:border-t  after:flex-1  after:border-gray-300'>
-            <p className='text-center font-semibold mx-4'>OR</p>
-          </div>
-          <OAuth/>
         </div>
       </div>
     </section>
