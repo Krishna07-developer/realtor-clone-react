@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { AiFillEye } from "react-icons/ai";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { toast } from 'react-toastify';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const SignIn = () => {
   const [showPassword,setShowPassword] = useState(false)
@@ -11,12 +13,25 @@ const SignIn = () => {
     password : ''
   })
   const {email,password} = formData;
-
+  const navigate = useNavigate()
   const handleInput = (e)=>{
     setFormData((prevState)=>({
       ...prevState,
       [e.target.id] : e.target.value
     }))
+  }
+
+  const handleSubmit = async (e)=>{
+    e.preventDefault();
+    try {
+      const auth = getAuth()
+      const userCredential = await signInWithEmailAndPassword(auth,email,password);
+      if(userCredential.user){
+        navigate("/")
+      }
+    } catch (error) {
+      toast.error('Bad error credentials!')
+    }
   }
 
   return (
@@ -29,7 +44,7 @@ const SignIn = () => {
           />
         </div>
         <div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-          <form>
+          <form onSubmit={handleSubmit}>
             <input className='mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
              type="email" placeholder='Email address' id='email' value={email} onChange={handleInput}/>
             <div className='relative mb-6'>
@@ -45,15 +60,15 @@ const SignIn = () => {
                 <Link to={'/forgot-password'} className='text-blue-600 hover:text-blue-800 transition ease-in-out duration-200'>Forgot Password?</Link>
               </p>
             </div>
+            <button type='submit' className='w-full bg-blue-600 p-2 my-2 rounded-lg text-white text-sm 
+            font-medium uppercase shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-150 ease-in-out active:bg-blue-800'>
+            Sign In</button>
+            <div className='my-4 before:border-t flex before:flex-1 items-center before:border-gray-300
+            after:border-t  after:flex-1  after:border-gray-300'>
+              <p className='text-center font-semibold mx-4'>OR</p>
+            </div>
+            <OAuth/>
           </form>
-          <button className='w-full bg-blue-600 p-2 my-2 rounded-lg text-white text-sm 
-          font-medium uppercase shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-150 ease-in-out active:bg-blue-800'>
-          Sign In</button>
-          <div className='my-4 before:border-t flex before:flex-1 items-center before:border-gray-300
-          after:border-t  after:flex-1  after:border-gray-300'>
-            <p className='text-center font-semibold mx-4'>OR</p>
-          </div>
-          <OAuth/>
         </div>
       </div>
     </section>
