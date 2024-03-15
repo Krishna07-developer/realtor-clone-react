@@ -3,7 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom"
 const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
+   
 
     function pathMathRoute(route){
         if(route === location.pathname){
@@ -21,11 +21,11 @@ const Header = () => {
                 <div>
                     <ul className='flex space-x-10'>
                         <li className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px]
-                         border-b-transparent ${pathMathRoute("/") && "text-black border-b-red-500"}`} onClick={()=>navigate('/')}>Home</li>
+                         border-transparent ${pathMathRoute("/") && "text-black border-b-red-500"}`} onClick={()=>navigate('/')}>Home</li>
                         <li className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px]
-                         border-b-transparent ${pathMathRoute("/offers") && "text-black border-b-red-500"}`} onClick={()=>navigate('/offers')}>Offers</li>
+                         border-transparent ${pathMathRoute("/offers") && "text-black border-b-red-500"}`} onClick={()=>navigate('/offers')}>Offers</li>
                         <li className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px]
-                         border-b-transparent ${pathMathRoute("/sign-in") && "text-black border-b-red-500"}`} onClick={()=>navigate('/sign-in')}>Sign In</li>
+                         border-transparent ${pathMathRoute("/sign-in") && "text-black border-b-red-500"}`} onClick={()=>navigate('/sign-in')}>Sign In</li>
                     </ul>
                 </div>
             </header>

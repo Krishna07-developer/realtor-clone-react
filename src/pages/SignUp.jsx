@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { AiFillEye } from "react-icons/ai";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
-
+import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth"
+import {db} from "../firebase"
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 const SignUp = () => {
   const [showPassword,setShowPassword] = useState(false)
   const [formData,setFormData] = useState({
-    fullname :'',
+    name :'',
     email : '',
     password : ''
   })
-  const {fullname,email,password} = formData;
-
+  const {name,email,password} = formData;
+  const navigate = useNavigate()
   const handleInput = (e)=>{
     setFormData((prevState)=>({
       ...prevState,
@@ -20,6 +23,29 @@ const SignUp = () => {
     }))
   }
 
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
+
+    try {
+      const auth = getAuth();
+      const userCredential =  await createUserWithEmailAndPassword(auth, email, password)
+        
+      updateProfile(auth.currentUser , {
+        displayName : name,
+      })
+        
+      const user = userCredential.user
+      const formDataCopy = {...formData}
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db,"users", user.uid), formDataCopy)
+      toast.success("Sign Up Was Successful!")
+      navigate("/")
+    } catch (error) {
+      toast.error('Something Went Wrong, With Registration!')
+    }
+  }
   return (
     <section>
       <h1 className='text-3xl font-bold text-center mt-6'>SignUp</h1>
@@ -30,9 +56,9 @@ const SignUp = () => {
           />
         </div>
         <div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-          <form>
+          <form onSubmit={handleSubmit}>
             <input className='mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
-             type="text" placeholder='Full name' id='email' value={fullname} onChange={handleInput}/>
+             type="text" placeholder='Full name' id='name' value={name} onChange={handleInput}/>
             <input className='mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
              type="email" placeholder='Email address' id='email' value={email} onChange={handleInput}/>
             <div className='relative mb-6'>
@@ -48,10 +74,10 @@ const SignUp = () => {
                 <Link to={'/forgot-password'} className='text-blue-600 hover:text-blue-800 transition ease-in-out duration-200'>Forgot Password?</Link>
               </p>
             </div>
+            <button className='w-full bg-blue-600 p-2 my-2 rounded-lg text-white text-sm 
+            font-medium uppercase shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-150 ease-in-out active:bg-blue-800'>
+            Sign Up</button>
           </form>
-          <button className='w-full bg-blue-600 p-2 my-2 rounded-lg text-white text-sm 
-          font-medium uppercase shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-150 ease-in-out active:bg-blue-800'>
-          Sign Up</button>
           <div className='my-4 before:border-t flex before:flex-1 items-center before:border-gray-300
           after:border-t  after:flex-1  after:border-gray-300'>
             <p className='text-center font-semibold mx-4'>OR</p>
